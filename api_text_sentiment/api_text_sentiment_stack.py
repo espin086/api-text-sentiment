@@ -1,11 +1,9 @@
 from constructs import Construct
 from aws_cdk import (
-    Duration,
     Stack,
+    aws_lambda as _lambda,
+    aws_apigateway as apigw,
     aws_iam as iam,
-    aws_sqs as sqs,
-    aws_sns as sns,
-    aws_sns_subscriptions as subs,
 )
 
 
@@ -13,14 +11,32 @@ class ApiTextSentimentStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
-
-        queue = sqs.Queue(
-            self, "ApiTextSentimentQueue",
-            visibility_timeout=Duration.seconds(300),
-        )
-
-        topic = sns.Topic(
-            self, "ApiTextSentimentTopic"
-        )
-
-        topic.add_subscription(subs.SqsSubscription(queue))
+        
+        
+        # create new IAM group and user
+        group = iam.Group(self, "ComprehendGroup")
+        user = iam.User(self, "ComprehendUser")
+        # add IAM user to the new group
+        user.add_to_group(group)
+        
+        
+        #Defines and AWS Lambda resource
+        my_lambda = _lambda.Function(
+            self, 'api_text_sentiment',
+            runtime=_lambda.Runtime.PYTHON_3_7,
+            code=_lambda.Code.from_asset('lambda'),
+            handler='api_text_sentiment.handler',
+            )
+            
+            
+        # add Rekognition permissions for Lambda function
+        statement = iam.PolicyStatement()
+        statement.add_actions("comprehend:DetectSentiment")
+        statement.add_resources("*")
+        my_lambda.add_to_role_policy(statement)    
+        
+        #defines api gateway    
+        apigw.LambdaRestApi(
+            self, 'api-text-sentiment',
+            handler=my_lambda,
+            )
