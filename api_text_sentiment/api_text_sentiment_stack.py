@@ -3,7 +3,7 @@ from aws_cdk import (
     Stack,
     aws_lambda as _lambda,
     aws_apigateway as apigw,
-    aws_iam as iam,
+    aws_iam as iam
 )
 
 
@@ -25,13 +25,14 @@ class ApiTextSentimentStack(Stack):
             self, 'api_text_sentiment',
             runtime=_lambda.Runtime.PYTHON_3_7,
             code=_lambda.Code.from_asset('lambda'),
-            handler='api_text_sentiment.handler',
+            handler='api_text_sentiment.lambda_handler',
             )
             
             
         # add Rekognition permissions for Lambda function
         statement = iam.PolicyStatement()
         statement.add_actions("comprehend:DetectSentiment")
+        statement.add_actions("execute-api:*")
         statement.add_resources("*")
         my_lambda.add_to_role_policy(statement)    
         

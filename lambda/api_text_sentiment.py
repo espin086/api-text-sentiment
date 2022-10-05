@@ -8,7 +8,7 @@ def detect_sentiment(text, language_code='en'):
     return response
 
 
-def handler(event, context):
+def lambda_handler(event, context):
     print('request: {}'.format(json.dumps(event)))
     
     
@@ -17,10 +17,12 @@ def handler(event, context):
     print('sentiment: {}'.format(sentiment))
     
     return {
-        'statusCode': 200,
-        'headers': {
-            'Content-Type': 'text/plain'
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": "application/json"
         },
-        'text': text,
-        'body': sentiment}
+        "body": json.dumps({
+            "sentiment ": sentiment
+        })
+    }
     
