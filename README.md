@@ -1,65 +1,16 @@
 
-# Welcome to your CDK Python project!
+# Welcome to Text Sentiment API!
 
-You should explore the contents of this project. It demonstrates a CDK app with an instance of a stack (`api_text_sentiment_stack`)
-which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
+Use the Text Sentiment API to determine the sentiment of a document. For example, you can use sentiment analysis to determine the sentiments of comments on a blog posting to determine if your readers liked the post.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+You can determine sentiment for documents in multiple languages. All documents in one job must be in the same language.
 
-This project is set up like a standard Python project.  The initialization process also creates
-a virtualenv within this project, stored under the .venv directory.  To create the virtualenv
-it assumes that there is a `python3` executable in your path with access to the `venv` package.
-If for any reason the automatic creation of the virtualenv fails, you can create the virtualenv
-manually once the init process completes.
+Sentiment determination returns the following values:
 
-To manually create a virtualenv on MacOS and Linux:
+- Positive – The text expresses an overall positive sentiment.
 
-```
-$ python3 -m venv .venv
-```
+- Negative – The text expresses an overall negative sentiment.
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+- Mixed – The text expresses both positive and negative sentiments.
 
-```
-$ source .venv/bin/activate
-```
-
-If you are a Windows platform, you would activate the virtualenv like this:
-
-```
-% .venv\Scripts\activate.bat
-```
-
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
-$ pip install -r requirements.txt
-```
-
-At this point you can now synthesize the CloudFormation template for this code.
-
-```
-$ cdk synth
-```
-
-You can now begin exploring the source code, contained in the hello directory.
-There is also a very trivial test included that can be run like this:
-
-```
-$ pytest
-```
-
-To add additional dependencies, for example other CDK libraries, just add to
-your requirements.txt file and rerun the `pip install -r requirements.txt`
-command.
-
-## Useful commands
-
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
-
-Enjoy!
+- Neutral – The text does not express either positive or negative sentiments.
